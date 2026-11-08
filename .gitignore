@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+build/
+node_modules/
+*.crx
+*.pem
+*.key
+.env
+.env.*

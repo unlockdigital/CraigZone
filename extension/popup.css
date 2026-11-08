@@ -1,0 +1,69 @@
+:root { color-scheme: light dark; font: 14px/1.4 system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { width: 380px; margin: 0; color: #202226; background: #f7f8fa; }
+body.full-page { width: auto; min-width: 0; font-size: 18px; }
+body.full-page main { width: min(100%, 1100px); margin: auto; padding: clamp(20px, 4vw, 64px); }
+main { padding: 17px; }
+header { display: flex; gap: 11px; align-items: center; margin-bottom: 15px; }
+.mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; color: white; background: #285fc4; font-weight: 750; letter-spacing: -.05em; }
+h1 { margin: 0; font-size: 17px; line-height: 1.2; }
+.brand { min-width: 0; }
+.brand-line { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
+.version { color: #5e6672; font-size: 12px; font-weight: 650; }
+header p { margin: 4px 0 0; color: #626a75; font-size: 12px; }
+.section-head { display: flex; justify-content: space-between; color: #5e6672; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .055em; }
+.tabs { list-style: none; margin: 7px 0 0; padding: 0; max-height: 250px; overflow-y: auto; border: 1px solid #dfe3e9; border-radius: 9px; background: white; }
+.tabs li + li { border-top: 1px solid #eceef1; }
+.tabs label { display: flex; gap: 9px; align-items: center; padding: 9px 10px; cursor: pointer; }
+.tabs li { display: flex; align-items: center; gap: 8px; padding-right: 8px; }
+.tabs label { flex: 1; min-width: 0; }
+.tabs .watch-game { flex: 0 0 auto; padding: 8px 12px; min-height: 38px; }
+.tabs .active-game { border-left: 3px solid #285fc4; }
+.tabs input { margin: 0; accent-color: #285fc4; }
+.tab-copy { min-width: 0; }
+.tab-title { display: block; overflow: hidden; color: #272b31; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.tab-url { display: block; overflow: hidden; color: #747c87; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.slot { flex: none; margin-left: auto; color: #89919d; font-size: 11px; }
+.empty { padding: 14px; color: #747c87; text-align: center; }
+.frame-origins { max-height: 65px; overflow-y: auto; margin: 10px 2px 0; color: #747c87; font-size: 10px; overflow-wrap: anywhere; }
+footer { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+button { flex: 1; min-height: 38px; border: 0; border-radius: 8px; font: inherit; font-weight: 650; cursor: pointer; }
+button:disabled { cursor: wait; opacity: .65; }
+.primary { color: white; background: #285fc4; }
+.secondary { color: #343a44; background: #e7eaf0; }
+.hint { margin: 11px 1px 0; color: #747c87; font-size: 11px; text-align: center; }
+.error { margin: 0 0 10px; padding: 8px 10px; border-radius: 7px; color: #8c241d; background: #fff0ee; font-size: 12px; }
+.diagnostics { margin-top: 12px; color: #747c87; font-size: 10px; }
+.diagnostics p { margin: 4px 0; }
+.diagnostics button { width: 100%; min-height: 30px; margin-top: 4px; font-size: 11px; }
+details { margin-top: 14px; }
+summary { cursor: pointer; font-size: 12px; color: #5e6672; }
+.watch-hint { margin: 14px 0; color: #5e6672; font-size: 13px; }
+.shortcut-strip { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 12px; margin: 14px 0; }
+#open-full-controls { width: 100%; }
+body.full-page #open-full-controls { display: none; }
+body.full-page h1 { font-size: 30px; }
+body.full-page .mark { width: 52px; height: 52px; }
+body.full-page header p, body.full-page .version { font-size: 16px; }
+body.full-page .section-head, body.full-page .slot { font-size: 15px; }
+body.full-page .tabs { max-height: none; }
+body.full-page .tabs label { min-height: 70px; padding: 14px; }
+body.full-page .tab-url, body.full-page summary, body.full-page .watch-hint, body.full-page .shortcut-strip, body.full-page .hint { font-size: 16px; }
+body.full-page .tabs input { width: 20px; height: 20px; flex: none; }
+body.full-page button, body.full-page .tabs .watch-game { min-height: 48px; }
+body.full-page .frame-origins { max-height: none; font-size: 14px; }
+body.full-page .diagnostics, body.full-page .diagnostics button { font-size: 14px; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid #285fc4; outline-offset: 3px; }
+[hidden] { display: none !important; }
+@media (min-width: 1800px) { body.full-page { font-size: 24px; } body.full-page main { width: min(100%, 1500px); } body.full-page .tabs label { min-height: 88px; } body.full-page .tab-url, body.full-page .watch-hint, body.full-page .shortcut-strip, body.full-page .version { font-size: 20px; } }
+@media (max-width: 500px) { body.full-page main { padding: 16px; } body.full-page { font-size: 16px; } body.full-page .tabs label { padding: 10px; } body.full-page .tabs .watch-game { padding: 6px 10px; } }
+@media (prefers-color-scheme: dark) {
+  body { color: #e8eaee; background: #202328; }
+  header p, .section-head, .tab-url, .slot, .empty, .hint { color: #a6adb8; }
+  .tabs { border-color: #41464f; background: #292d33; }
+  .tabs li + li { border-color: #3a3f47; }
+  .tab-title { color: #e5e8ec; }
+  .secondary { color: #e3e6eb; background: #3a3f48; }
+  .error { color: #ffc4bc; background: #482b2a; }
+  .version, summary, .watch-hint { color: #b8c0cc; }
+}

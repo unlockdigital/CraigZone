@@ -1,0 +1,72 @@
+{
+  "manifest_version": 3,
+  "name": "Craig Zone",
+  "version": "0.3.0",
+  "description": "Local game switching, fullscreen controls, and private operation counts for Craig Zone.",
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "scripting",
+    "storage",
+    "webNavigation"
+  ],
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "scripts": [
+      "diagnostics.js",
+      "background.js"
+    ]
+  },
+  "action": {
+    "default_title": "Craig Zone",
+    "default_popup": "popup.html",
+    "default_icon": "icons/craig-zone.svg",
+    "default_area": "navbar"
+  },
+  "commands": {
+    "next": {
+      "suggested_key": {
+        "default": "Alt+Shift+Right"
+      },
+      "description": "Next Craig Zone tab"
+    },
+    "previous": {
+      "suggested_key": {
+        "default": "Alt+Shift+Left"
+      },
+      "description": "Previous Craig Zone tab"
+    },
+    "last": {
+      "suggested_key": {
+        "default": "Alt+Shift+B"
+      },
+      "description": "Return to the previous Craig Zone tab"
+    },
+    "toggle": {
+      "suggested_key": {
+        "default": "Alt+Shift+Z"
+      },
+      "description": "Start or stop Craig Zone"
+    },
+    "open-controls": {
+      "suggested_key": {
+        "default": "Alt+Shift+C"
+      },
+      "description": "Open Craig Zone controls"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "craig-zone@unlockdigital",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
+  }
+}
