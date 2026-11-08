@@ -4,6 +4,7 @@ import argparse
 import base64
 import hashlib
 import importlib.util
+import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -19,4 +20,6 @@ with tempfile.TemporaryDirectory(prefix='craig-zone-synthetic-identity-') as tem
     public = (folder/'test.der').read_bytes()
     identity = ''.join(chr(ord('a') + int(n, 16)) for n in hashlib.sha256(public).digest()[:16].hex())
     builder.build(folder/'extension',base64.b64encode(public).decode())
-    subprocess.run(['node',str(root/'chromium/test-chromium.cjs'),str(args.browser.resolve()),str(folder/'extension'),identity],cwd=root,check=True)
+    test_env={key:os.environ[key] for key in ('PATH','SYSTEMROOT','WINDIR','COMSPEC','TEMP','TMP','TMPDIR','DISPLAY','WAYLAND_DISPLAY','XDG_RUNTIME_DIR','CZ_CHROMIUM_EVIDENCE_DIR') if key in os.environ}
+    test_env['HOME']=str(folder)
+    subprocess.run(['node',str(root/'chromium/test-chromium.cjs'),str(args.browser.resolve()),str(folder/'extension'),identity],cwd=root,check=True,timeout=180,env=test_env)

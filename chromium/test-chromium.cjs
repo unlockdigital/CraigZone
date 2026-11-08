@@ -38,7 +38,10 @@ function cdp(method, params = {}, sessionId) {
   const message = { id, method, params };
   if (sessionId) message.sessionId = sessionId;
   browserSocket.send(JSON.stringify(message));
-  return new Promise((resolve, reject) => pending.set(id, { resolve, reject, method }));
+  return new Promise((resolve, reject) => {
+    const timer=setTimeout(()=>{pending.delete(id);reject(new Error(`Browser request timed out: ${method}`));},15000);
+    pending.set(id, { resolve, reject, method, timer });
+  });
 }
 
 async function attachTarget(targetId) {
@@ -93,12 +96,15 @@ async function run() {
   });
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
+  const browserHome=path.join(temporaryRoot,"home");fs.mkdirSync(browserHome);
+  const browserEnv=Object.fromEntries(["PATH","SYSTEMROOT","WINDIR","COMSPEC","TEMP","TMP","TMPDIR","DISPLAY","WAYLAND_DISPLAY","XDG_RUNTIME_DIR"].filter(key=>process.env[key]).map(key=>[key,process.env[key]]));
+  Object.assign(browserEnv,{HOME:browserHome,XDG_CONFIG_HOME:path.join(browserHome,"config"),XDG_CACHE_HOME:path.join(browserHome,"cache")});
   browserProcess = spawn(browserBinary, [
     "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
     "--disable-background-networking", "--password-store=basic", "--use-mock-keychain", `--user-data-dir=${profile}`,
     `--disable-extensions-except=${testExtension}`, `--load-extension=${testExtension}`,
     "--remote-debugging-port=0", "about:blank"
-  ], { stdio: ["ignore", "ignore", "pipe"] });
+  ], { stdio: ["ignore", "ignore", "pipe"], env:browserEnv });
   browserProcess.stderr.on("data", (chunk) => { browserOutput = `${browserOutput}${chunk}`.slice(-5000); });
 
   const activePortFile = path.join(profile, "DevToolsActivePort");
@@ -118,6 +124,7 @@ async function run() {
     if (message.id && pending.has(message.id)) {
       const request = pending.get(message.id);
       pending.delete(message.id);
+      clearTimeout(request.timer);
       if (message.error) request.reject(new Error(`${request.method}: ${message.error.message}`));
       else request.resolve(message.result || {});
     }
@@ -128,6 +135,7 @@ async function run() {
   await waitFor(async () => (await evaluate(pageA.sessionId, "document.readyState")) === "complete", "synthetic page A");
   await waitFor(async () => (await evaluate(pageB.sessionId, "document.readyState")) === "complete", "synthetic page B");
   const popup = await openPage(`chrome-extension://${extensionId}/popup.html`);
+  console.log('Browser and extension controls ready.');
   await cdp("Emulation.setDeviceMetricsOverride", { width: 520, height: 900, deviceScaleFactor: 1, mobile: false }, popup.sessionId);
   await waitFor(async () => await evaluate(popup.sessionId, "document.readyState") === "complete", "extension popup page");
   const popupInfo = await evaluate(popup.sessionId, `(()=>{const main=document.querySelector('main');const box=main.getBoundingClientRect();return {title:document.title,width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,main:{x:box.x,y:box.y,width:box.width,height:box.height},hasStart:!!document.getElementById('start'),text:document.body.innerText.slice(0,180)}})()`);
@@ -190,6 +198,7 @@ async function run() {
     return check.session.enabled ? check.session : null;
   }, "session startup through the popup Start button");
   startResult.ok = popupStarted.enabled;
+  console.log('Popup startup and audio checks ready.');
   assert.equal(startResult.ok, true, `session start failed: ${JSON.stringify(startResult)}`);
 
   const tabsState = () => evaluate(popup.sessionId, `(async()=>{
@@ -235,6 +244,7 @@ async function run() {
     restartMethod = "Target.closeTarget (ServiceWorker CDP domain unavailable)";
   }
   const sessionAfterRestart = await evaluate(popup.sessionId, "browser.runtime.sendMessage({type:'CZ_GET_SESSION'})");
+  console.log('Service-worker recovery checked.');
   assert.equal(sessionAfterRestart.enabled, true, "session storage restored after the MV3 worker restarted");
   state = await tabsState();
   assert.equal(state.bActive, true);
@@ -259,6 +269,7 @@ async function run() {
   const editCounts = await evaluate(popup.sessionId,"browser.runtime.sendMessage({type:'CZ_DIAGNOSTICS_GET'})");
   const actionCounts=Object.values(editCounts.days).reduce((a,row)=>({starts:a.starts+(row.actions.starts||0),stops:a.stops+(row.actions.stops||0),edits:a.edits+(row.actions.edits||0)}),{starts:0,stops:0,edits:0});
   assert.deepEqual(actionCounts,{starts:1,stops:0,edits:1},"a live edit preserves the session without a stop/start cycle");
+  console.log('Live lineup edit checked.');
   await evaluate(popup.sessionId, "browser.runtime.sendMessage({type:'CZ_STOP_SESSION'})");
 
   const videoPage = await openPage(`${origin}/video`);
@@ -292,6 +303,7 @@ async function run() {
   assert.equal(liveFullscreenEdit.ok,true,"a game can join a session in theater mode");
   const preservedGeometry = await evaluate(videoPage.sessionId,"(()=>{const r=document.querySelector('video').getBoundingClientRect();return {width:r.width,height:r.height,w:innerWidth,h:innerHeight}})()");
   assert(Math.abs(preservedGeometry.width-preservedGeometry.w)<3&&Math.abs(preservedGeometry.height-preservedGeometry.h)<3,"live edit preserves the expanded active video");
+  console.log('Direct player geometry and live theater edit checked.');
   await evaluate(popup.sessionId, "browser.runtime.sendMessage({type:'CZ_STOP_SESSION'})");
   const restoredVideo = await evaluate(videoPage.sessionId, `(()=>{const r=document.querySelector('video').getBoundingClientRect();return {width:r.width,height:r.height}})()`);
   assert(Math.abs(restoredVideo.width - 320) < 1 && Math.abs(restoredVideo.height - 180) < 1, `stop did not restore synthetic video size: ${JSON.stringify(restoredVideo)}`);
@@ -313,6 +325,7 @@ async function run() {
     const g=await evaluate(customPage.sessionId,"(()=>{const v=document.querySelector('video'),r=v.getBoundingClientRect();return {paused:v.paused,width:r.width,height:r.height,w:innerWidth,h:innerHeight,native:!!document.fullscreenElement}})()");
     return !g.paused&&!g.native&&Math.abs(g.width-g.w)<3&&Math.abs(g.height-g.h)<3?g:null;
   },"one deliberate custom Play click expands the video without autoplay or a fullscreen click");
+  console.log('Deliberate custom Play expansion checked.');
   await evaluate(popup.sessionId,"browser.runtime.sendMessage({type:'CZ_STOP_SESSION'})");
   await cdp("Target.closeTarget",{targetId:customPage.targetId});
   const embeddedPage = await openPage(`${origin}/embedded`);
