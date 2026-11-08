@@ -103,7 +103,7 @@
       }
     }
     const target = windowTabs.find((tab) => tab.id === targetId);
-    if (!target) throw new Error("The selected Craig Zone tab is no longer open.");
+    if (!target) throw new Error("The selected CraigZone tab is no longer open.");
     if (Boolean(target.mutedInfo?.muted) !== preferredMuted) await browser.tabs.update(targetId, { muted: preferredMuted });
     for (const tab of windowTabs) session.mutedByTab[tab.id] = tab.id === targetId ? preferredMuted : true;
     if (!target.active) await browser.tabs.update(targetId, { active: true });
@@ -241,7 +241,7 @@
       for (const tab of session.tabs) {
         const result = await browser.scripting.executeScript({ target: { tabId: tab.id, allFrames: true }, files: ["content.js"] });
         const failures = Array.isArray(result) ? result.filter((frame) => frame.error) : [];
-        if (failures.length) throw new Error(`Craig Zone could not reach ${failures.length} frames in slot ${tab.slot}. It stayed stopped because player controls would be incomplete.`);
+        if (failures.length) throw new Error(`CraigZone could not reach ${failures.length} frames in slot ${tab.slot}. It stayed stopped because player controls would be incomplete.`);
         await browser.scripting.insertCSS({ target: { tabId: tab.id, allFrames: true }, files: ["content.css"] });
       }
       await broadcastState();
@@ -377,7 +377,7 @@
     if (automatic && (session.autoOptOutByTab[tabId] || operationCandidates.some((item) => item.kind !== "video"))) return;
     const member = session.tabs.find((tab) => tab.id === tabId);
     if (typeof browser.webNavigation?.getAllFrames !== "function") {
-      return warnFullscreen(tabId, "Player inspection is unavailable. Restart the browser and Craig Zone. Native fullscreen remains active.");
+      return warnFullscreen(tabId, "Player inspection is unavailable. Restart the browser and CraigZone. Native fullscreen remains active.");
     }
     const frames = await browser.webNavigation.getAllFrames({ tabId }).catch(() => []);
     const byId = new Map((frames || []).map((frame) => [frame.frameId, frame]));
@@ -389,7 +389,7 @@
         while (frame && frame.frameId !== 0) frame = byId.get(frame.parentFrameId);
         return frame?.frameId === 0;
       });
-      if (!reachablePlayer) return warnFullscreen(tabId, "Craig Zone could not verify a reachable player inside the fullscreen iframe. Native fullscreen remains active.");
+      if (!reachablePlayer) return warnFullscreen(tabId, "CraigZone could not verify a reachable player inside the fullscreen iframe. Native fullscreen remains active.");
     }
     const depth = (candidate) => {
       let frame = byId.get(candidate.frameId);
@@ -440,7 +440,7 @@
     const failed = prepared.find(({ response }) => response?.ready !== true);
     if (failed) {
       await Promise.allSettled(steps.map((step) => sendFrameMessage(tabId, step.frameId, { type: "CZ_FS_ABORT", token: step.token })));
-      return warnFullscreen(tabId, `Craig Zone cannot reach every player frame (${failed.response?.reason || "frame did not respond"}). Native fullscreen remains active.`);
+      return warnFullscreen(tabId, `CraigZone cannot reach every player frame (${failed.response?.reason || "frame did not respond"}). Native fullscreen remains active.`);
     }
     for (const step of steps) {
       let staged;
@@ -448,7 +448,7 @@
       catch (error) { staged = { ok: false, reason: error.message || String(error) }; }
       if (staged?.ok !== true) {
         await Promise.allSettled(steps.map((item) => sendFrameMessage(tabId, item.frameId, { type: "CZ_FS_ABORT", token: item.token })));
-        return warnFullscreen(tabId, `Craig Zone could not stage the complete player chain (${staged?.reason || "frame did not respond"}). Native fullscreen remains active.`);
+        return warnFullscreen(tabId, `CraigZone could not stage the complete player chain (${staged?.reason || "frame did not respond"}). Native fullscreen remains active.`);
       }
     }
     if (!automatic) {
@@ -457,7 +457,7 @@
       catch (error) { exited = { ok: false, reason: error.message || String(error) }; }
       if (exited?.ok !== true) {
         await Promise.allSettled(steps.map((step) => sendFrameMessage(tabId, step.frameId, { type: "CZ_FS_ABORT", token: step.token })));
-        return warnFullscreen(tabId, `Craig Zone could not leave player fullscreen (${exited?.reason || "top frame did not respond"}). Native fullscreen remains active.`);
+        return warnFullscreen(tabId, `CraigZone could not leave player fullscreen (${exited?.reason || "top frame did not respond"}). Native fullscreen remains active.`);
       }
     }
     for (const step of steps) {
@@ -466,7 +466,7 @@
       catch (error) { applied = { ok: false, reason: error.message || String(error) }; }
       if (applied?.ok !== true) {
         await Promise.allSettled(steps.map((item) => sendFrameMessage(tabId, item.frameId, { type: "CZ_FS_ABORT", token: item.token })));
-        return warnFullscreen(tabId, `Craig Zone could not expand the complete player chain (${applied?.reason || "frame did not respond"}).`);
+        return warnFullscreen(tabId, `CraigZone could not expand the complete player chain (${applied?.reason || "frame did not respond"}).`);
       }
     }
     session.fullscreenByTab ||= {};
@@ -477,7 +477,7 @@
     } catch (error) {
       await Promise.allSettled(steps.map((step) => sendFrameMessage(tabId, step.frameId, { type: "CZ_FS_ABORT", token })));
       delete session.fullscreenByTab[tabId];
-      return warnFullscreen(tabId, `Craig Zone could not switch the Firefox window to fullscreen (${error.message || String(error)}). Player layout was restored.`);
+      return warnFullscreen(tabId, `CraigZone could not switch the Firefox window to fullscreen (${error.message || String(error)}). Player layout was restored.`);
     }
     if (!automatic) delete session.autoOptOutByTab[tabId];
     await persistSession();
@@ -510,7 +510,7 @@
     await Promise.allSettled(restores);
     session.fullscreenByTab = {};
     session.warning = nativeExitWarning
-      ? `Craig Zone restored the browser layout, but player fullscreen could not be exited (${nativeExitWarning}).`
+      ? `CraigZone restored the browser layout, but player fullscreen could not be exited (${nativeExitWarning}).`
       : "";
     await browser.windows.update(session.windowId, { state: session.originalWindowState || "normal" }).catch(() => {});
     await persistSession();
@@ -715,7 +715,7 @@
       const parsed = new URL(tab.url);
       const origin = `${parsed.protocol}//${parsed.hostname}/*`;
       if (!await browser.permissions.contains({ origins: [origin] })) {
-        session.warning = "A selected tab changed site and needs permission. Use the toolbar to restart Craig Zone.";
+        session.warning = "A selected tab changed site and needs permission. Use the toolbar to restart CraigZone.";
         await persistSession();
         await broadcastState();
         return;
@@ -724,7 +724,7 @@
       const result = await browser.scripting.executeScript({ target: { tabId, allFrames: true }, files: ["content.js"] });
       await browser.scripting.insertCSS({ target: { tabId, allFrames: true }, files: ["content.css"] });
       const failures = Array.isArray(result) ? result.filter((frame) => frame.error).length : 0;
-      session.warning = failures ? `Craig Zone could not reach ${failures} embedded frame${failures === 1 ? "" : "s"}. Enable the listed frame origins in the toolbar and restart.` : "";
+      session.warning = failures ? `CraigZone could not reach ${failures} embedded frame${failures === 1 ? "" : "s"}. Enable the listed frame origins in the toolbar and restart.` : "";
       await persistSession();
       await broadcastState();
     }).catch((error) => {
@@ -746,7 +746,7 @@
           const origin = /^https?:/.test(details.url || "") ? new URL(details.url).origin : "";
           if (!origin) return;
           if (origin !== member.origin && !member.playerOrigins.includes(origin)) {
-            await warnFullscreen(details.tabId, `Slot ${member.slot} loaded a player at ${origin}. Stop and restart Craig Zone to approve this player site.`);
+            await warnFullscreen(details.tabId, `Slot ${member.slot} loaded a player at ${origin}. Stop and restart CraigZone to approve this player site.`);
             return;
           }
           const originGranted = await browser.permissions.contains({ origins: [matchPattern(details.url)] });

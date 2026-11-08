@@ -131,7 +131,7 @@
       status.textContent = session.warning || (editing ? "Choose games to add or remove, then apply. Your session stays running." : `Running · ${session.tabs.length} game${session.tabs.length === 1 ? "" : "s"}. Choose Watch to return to a game, or Edit games to change the lineup.`);
       frameOriginsLabel.textContent = session.tabs.map((tab) => `#${tab.slot}: ${(tab.playerOrigins || []).join(", ") || "page origin only"}`).join("\n");
     } else if (!keepPlan) {
-      status.textContent = "Ready. Choose your games, start Craig Zone, then click Play.";
+      status.textContent = "Ready. Choose your games, start CraigZone, then click Play.";
       frameOriginsLabel.textContent = "Start checks only the selected tabs and their embedded players. Firefox may ask for access to additional player sites before controls start.";
     }
     hasRendered = true;
@@ -191,9 +191,9 @@
       await renderDiagnostics();
       diagnosticsSummary.textContent = result?.storageCleared
         ? (result?.mirrorCleared ? "Diagnostics cleared from this browser and the local mirror." : "Browser diagnostics cleared. The local mirror could not be confirmed.")
-        : "Craig Zone could not confirm clearing browser diagnostics.";
+        : "CraigZone could not confirm clearing browser diagnostics.";
     } catch (_) {
-      diagnosticsSummary.textContent = "Craig Zone could not confirm clearing diagnostics.";
+      diagnosticsSummary.textContent = "CraigZone could not confirm clearing diagnostics.";
     } finally { clearDiagnosticsButton.disabled = false; }
   });
   document.getElementById("export-diagnostics").addEventListener("click", async () => {
@@ -208,13 +208,13 @@
 
   function originPattern(url) {
     const parsed = new URL(url);
-    if (!/^https?:$/.test(parsed.protocol)) throw new Error("Craig Zone can access HTTP and HTTPS player sites only.");
+    if (!/^https?:$/.test(parsed.protocol)) throw new Error("CraigZone can access HTTP and HTTPS player sites only.");
     return `${parsed.protocol}//${parsed.hostname}/*`;
   }
 
   async function inspectSelectedTabs(ids, windowId) {
     if (typeof browser.webNavigation?.getAllFrames !== "function") {
-      throw new Error("Player inspection is unavailable. Close and reopen the browser, then open Craig Zone again. If this continues, use Craig Zone Help to check the extension.");
+      throw new Error("Player inspection is unavailable. Close and reopen the browser, then open CraigZone again. If this continues, use CraigZone Help to check the extension.");
     }
     const byId = new Map(tabs.map((tab) => [tab.id, tab]));
     const originsByTab = {};
@@ -248,7 +248,7 @@
     const result = await browser.runtime.sendMessage({
       type: plan.mode === "update" ? "CZ_UPDATE_SESSION" : "CZ_START", ids: plan.ids, windowId: plan.windowId, playerOriginsByTab: plan.originsByTab
     });
-    if (!result?.ok) throw new Error(result?.error || "Craig Zone could not start.");
+    if (!result?.ok) throw new Error(result?.error || "CraigZone could not start.");
     editing = false;
     await render();
     await renderDiagnostics();
@@ -270,7 +270,7 @@
         });
         const granted = await permissionRequest;
         await browser.runtime.sendMessage({ type: "CZ_PERMISSION_RESULT", outcome: granted ? "granted" : "denied" });
-        if (!granted) throw new Error("Craig Zone needs access to the selected pages and their frame list before it can start.");
+        if (!granted) throw new Error("CraigZone needs access to the selected pages and their frame list before it can start.");
         const current = await browser.runtime.sendMessage({ type: "CZ_GET_SESSION" });
         session = current.enabled ? current : null;
         const windowId = (await browser.windows.getCurrent()).id;
@@ -294,7 +294,7 @@
         });
         const granted = await permissionRequest;
         await browser.runtime.sendMessage({ type: "CZ_PERMISSION_RESULT", outcome: granted ? "granted" : "denied" });
-        if (!granted) throw new Error("Firefox did not grant every detected player site. Craig Zone remains stopped.");
+        if (!granted) throw new Error("Firefox did not grant every detected player site. CraigZone remains stopped.");
         const checks = await Promise.all(plan.framePatterns.map(async (origin) => [origin, await browser.permissions.contains({ origins: [origin] })]));
         const missing = checks.filter(([, allowed]) => !allowed).map(([origin]) => origin);
         if (missing.length) throw new Error(`Player access remains incomplete: ${missing.join(", ")}`);

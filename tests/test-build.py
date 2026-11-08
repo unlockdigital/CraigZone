@@ -24,7 +24,7 @@ class ChromiumBuildTest(unittest.TestCase):
                 BUILD.build(first)
             manifest = json.loads((first / "manifest.json").read_text())
             self.assertEqual(manifest["manifest_version"], 3)
-            self.assertEqual(manifest["version"], "0.3.0")
+            self.assertEqual(manifest["version"], "0.3.2")
             self.assertNotIn("nativeMessaging", manifest["permissions"])
             self.assertIn("webNavigation", manifest["permissions"])
             self.assertNotIn("webNavigation", manifest.get("optional_permissions", []))

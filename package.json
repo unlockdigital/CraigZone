@@ -1,6 +1,6 @@
 {
   "name": "craig-zone",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "private": true,
   "description": "RedZone-inspired switching and audio control for browser video tabs",
   "license": "MIT",

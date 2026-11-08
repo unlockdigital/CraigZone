@@ -13,7 +13,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SOURCE = HERE.parent / "src"
-VERSION = "0.3.0"
+VERSION = "0.3.2"
 SOURCE_FILES = (
     "background.js", "content.css", "content.js", "diagnostics.js",
     "popup.css", "popup.html", "popup.js",
@@ -57,7 +57,7 @@ def build(destination: Path, extension_key: str | None = None, native_diagnostic
     manifest["optional_host_permissions"] = ["http://*/*", "https://*/*"]
     manifest["minimum_chrome_version"] = "127"
     manifest["background"] = {"service_worker": "service-worker.js"}
-    manifest["action"] = {"default_title": "Craig Zone", "default_popup": "popup.html", "default_icon": "icons/craig-zone.png"}
+    manifest["action"] = {"default_title": "CraigZone", "default_popup": "popup.html", "default_icon": "icons/craig-zone.png"}
     # Chromium accepts at most four suggested keyboard shortcuts.
     manifest["commands"]["open-controls"].pop("suggested_key", None)
     manifest["commands"]["next"]["suggested_key"] = {"default": "Alt+Shift+Right"}

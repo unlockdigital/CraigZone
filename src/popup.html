@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Craig Zone</title>
+  <title>CraigZone</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <main>
     <header>
       <span class="mark" aria-hidden="true">CZ</span>
-      <div class="brand"><div class="brand-line"><h1>Craig Zone</h1><span id="version" class="version">Loading</span><span id="browser-name" class="version"></span></div><p id="status" role="status">Choose your games.</p></div>
+      <div class="brand"><div class="brand-line"><h1>CraigZone</h1><span id="version" class="version">Loading</span><span id="browser-name" class="version"></span></div><p id="status" role="status">Choose your games.</p></div>
     </header>
     <div id="error" class="error" role="alert" hidden></div>
     <section aria-label="Tabs in this window">
@@ -21,12 +21,12 @@
     </section>
     <footer>
       <button id="start" class="primary" type="button">Check players and start</button>
-      <button id="stop" class="secondary" type="button" hidden>Stop Craig Zone</button>
+      <button id="stop" class="secondary" type="button" hidden>Stop CraigZone</button>
       <button id="edit-games" class="primary" type="button" hidden>Edit games</button>
       <button id="cancel-edit" class="secondary" type="button" hidden>Cancel</button>
     </footer>
-    <p id="watch-hint" class="watch-hint">Start Craig Zone, then click Play on each game. A recognized player expands after playback begins.</p>
-    <div class="shortcut-strip" aria-label="Game shortcuts"><span>← / → Switch</span><span>1–9 Game slot</span><span>B Last game</span><span>M Mute</span></div>
+    <p id="watch-hint" class="watch-hint">Start CraigZone, then click Play on each game. Press Enter for fullscreen in supporting players, or use the player’s fullscreen button.</p>
+    <div class="shortcut-strip" aria-label="Game shortcuts"><span>← / → Switch</span><span>1–9 Game slot</span><span>B Last game</span><span>M Mute</span><span>Enter Fullscreen*</span></div>
     <button id="open-full-controls" class="secondary" type="button">Open larger controls</button>
     <details class="diagnostics" aria-label="Local diagnostics"><summary>Local diagnostics and privacy</summary>
       <p id="diagnostics-summary">Local counts cover the last 7 days.</p>
@@ -35,7 +35,7 @@
       <button id="clear-diagnostics" class="secondary" type="button">Clear diagnostics</button>
       <p class="privacy">Counts stay on this computer for local troubleshooting. URLs, titles, media, and key histories are excluded.</p>
     </details>
-    <p class="hint">Escape minimizes the player and pauses automatic expansion for that game. Reopen the player’s fullscreen control to enable expansion again. Unrecognized Play controls can use the player’s fullscreen button.</p>
+    <p class="hint">*Enter uses the video player’s shortcut and depends on player support and keyboard focus. Escape minimizes the player and pauses automatic expansion for that game. Reopen the player’s fullscreen control to enable expansion again. Unrecognized Play controls can use the player’s fullscreen button.</p>
   </main>
   <script src="popup.js"></script>
 </body>

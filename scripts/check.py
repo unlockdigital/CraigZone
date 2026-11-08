@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the portable, dependency-free Craig Zone checks."""
+"""Run the portable, dependency-free CraigZone checks."""
 from pathlib import Path
 import subprocess
 import sys

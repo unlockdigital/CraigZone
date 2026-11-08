@@ -1,4 +1,4 @@
-# Craig Zone contributor instructions
+# CraigZone contributor instructions
 
 - Write direct affirmative prose.
 - Preserve manual playback control and reversible fullscreen/audio behavior.

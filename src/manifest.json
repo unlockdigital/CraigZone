@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Craig Zone",
-  "version": "0.3.0",
-  "description": "Local game switching, fullscreen controls, and private operation counts for Craig Zone.",
+  "name": "CraigZone",
+  "version": "0.3.2",
+  "description": "Switch between your video tabs with focused audio, fullscreen controls, and local usage counts.",
   "permissions": [
     "activeTab",
     "tabs",
@@ -21,7 +21,7 @@
     ]
   },
   "action": {
-    "default_title": "Craig Zone",
+    "default_title": "CraigZone",
     "default_popup": "popup.html",
     "default_icon": "icons/craig-zone.svg",
     "default_area": "navbar"
@@ -31,31 +31,31 @@
       "suggested_key": {
         "default": "Alt+Shift+Right"
       },
-      "description": "Next Craig Zone tab"
+      "description": "Next CraigZone tab"
     },
     "previous": {
       "suggested_key": {
         "default": "Alt+Shift+Left"
       },
-      "description": "Previous Craig Zone tab"
+      "description": "Previous CraigZone tab"
     },
     "last": {
       "suggested_key": {
         "default": "Alt+Shift+B"
       },
-      "description": "Return to the previous Craig Zone tab"
+      "description": "Return to the previous CraigZone tab"
     },
     "toggle": {
       "suggested_key": {
         "default": "Alt+Shift+Z"
       },
-      "description": "Start or stop Craig Zone"
+      "description": "Start or stop CraigZone"
     },
     "open-controls": {
       "suggested_key": {
         "default": "Alt+Shift+C"
       },
-      "description": "Open Craig Zone controls"
+      "description": "Open CraigZone controls"
     }
   },
   "browser_specific_settings": {

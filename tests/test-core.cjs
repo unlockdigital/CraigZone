@@ -363,7 +363,7 @@ async function send(message, sender = {}) {
   assert.equal(fakeTabs.get(2).mutedInfo.muted, true, "Watch keeps other games muted");
   await send({ type: "CZ_STOP_SESSION" }, popupSender);
   core._setSession(null);
-  console.log("Craig Zone core mocked checks passed.");
+  console.log("CraigZone core mocked checks passed.");
 })().catch((error) => {
   console.error(error);
   process.exitCode = 1;

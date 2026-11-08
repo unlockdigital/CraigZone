@@ -136,7 +136,7 @@ function load(browser) {
   assert.deepEqual(await rejectedMirror.clear(), { ok: false, storageCleared: true, mirrorCleared: false },
     "a resolved native message carrying a rejected schema response does not confirm mirror clear");
 
-  console.log("Craig Zone diagnostics race and clear-status checks passed.");
+  console.log("CraigZone diagnostics race and clear-status checks passed.");
 })().catch((error) => {
   console.error(error);
   process.exitCode = 1;

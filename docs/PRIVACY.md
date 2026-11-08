@@ -1,6 +1,6 @@
 # Privacy and permissions
 
-Craig Zone runs its bundled extension code locally. You approve access to the video pages and embedded player sites in your selected lineup.
+CraigZone runs its bundled extension code locally. You approve access to the video pages and embedded player sites in your selected lineup.
 
 The tab picker reads open-tab titles and sites. Running-session labels, approved origins, mute choices, and restoration state use browser session storage. A full browser restart ends that session.
 

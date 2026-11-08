@@ -92,7 +92,7 @@ async function run() {
       response.end(videoHtml.replace('<video id="player" controls></video>', '<video id="player" controls></video><button id="custom-play" aria-label="Play game" style="position:absolute;left:10px;top:10px;z-index:3">Play</button>').replace('v.muted=true;', 'v.muted=true;document.querySelector("#custom-play").onclick=()=>v.play();'));
     } else if (request.url === "/video" || request.url === "/player") {
       response.end(videoHtml);
-    } else response.end(`<!doctype html><title>Synthetic Craig Zone page</title><input id="typing"><main>${request.url}</main>`);
+    } else response.end(`<!doctype html><title>Synthetic CraigZone page</title><input id="typing"><main>${request.url}</main>`);
   });
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
@@ -139,7 +139,7 @@ async function run() {
   await cdp("Emulation.setDeviceMetricsOverride", { width: 520, height: 900, deviceScaleFactor: 1, mobile: false }, popup.sessionId);
   await waitFor(async () => await evaluate(popup.sessionId, "document.readyState") === "complete", "extension popup page");
   const popupInfo = await evaluate(popup.sessionId, `(()=>{const main=document.querySelector('main');const box=main.getBoundingClientRect();return {title:document.title,width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight,main:{x:box.x,y:box.y,width:box.width,height:box.height},hasStart:!!document.getElementById('start'),text:document.body.innerText.slice(0,180)}})()`);
-  assert.equal(popupInfo.title, "Craig Zone");
+  assert.equal(popupInfo.title, "CraigZone");
   assert.equal(popupInfo.hasStart, true);
   await waitFor(async () => evaluate(popup.sessionId,"document.body.classList.contains('full-page')"), "larger controls mode for a full browser tab");
   const responsiveLayouts=[];

@@ -933,7 +933,7 @@
   function onMessage(message) {
     if (stopped || !message || typeof message !== 'object') return;
     if (message.type === 'CZ_READY_PLAYER') {
-      statusNotice = 'Click Play to watch. Craig Zone expands a recognized player after playback begins.';
+      statusNotice = 'Click Play to watch. CraigZone expands a recognized player after playback begins.';
       showStatus(5000);
       return Promise.resolve({ ok: true });
     }

@@ -60,7 +60,7 @@ const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   await pause(350);
   assert.equal(failWrites, true, "storage write failure is contained");
   assert.equal(diagnostics._clean(null, today).version, 2, "diagnostics remain readable after storage failure");
-  console.log("Craig Zone diagnostics mocked privacy and resilience checks passed.");
+  console.log("CraigZone diagnostics mocked privacy and resilience checks passed.");
 })().catch((error) => {
   console.error(error);
   process.exitCode = 1;

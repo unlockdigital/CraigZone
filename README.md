@@ -1,11 +1,11 @@
-# Craig Zone
+# CraigZone
 
 **RedZone-inspired switching for your own video tabs.**
 
 [![Checks](https://github.com/unlockdigital/CraigZone/actions/workflows/checks.yml/badge.svg)](https://github.com/unlockdigital/CraigZone/actions/workflows/checks.yml)
 [![MIT license](https://img.shields.io/github/license/unlockdigital/CraigZone)](LICENSE)
 
-Inspired by [NFL RedZone](https://www.nfl.com/redzone/), Craig Zone brings a personal viewing lineup to your browser. Jump between sports, livestreams, lectures, music videos, and anything else you watch in a video tab.
+Inspired by [NFL RedZone](https://www.nfl.com/redzone/), CraigZone brings a personal viewing lineup to your browser. Jump between sports, livestreams, lectures, music videos, and anything else you watch in a video tab.
 
 - **Switch quickly.** Use arrows, numbered slots, or a previous-video shortcut.
 - **Keep audio focused.** Remember each video's mute choice and quiet background tabs.
@@ -23,10 +23,10 @@ python3 scripts/build.py build/chromium
 ```
 
 1. Open `chrome://extensions`, enable **Developer mode**, and **Load unpacked** → `build/chromium`.
-2. Open 2–9 video tabs. Select them in Craig Zone, choose **Check players and start**, and approve their player sites.
-3. Press Play and use your player's fullscreen control. **Edit games → Apply** changes your lineup during a session.
+2. Open 2–9 video tabs. Select them in CraigZone, choose **Check players and start**, and approve their player sites.
+3. Press Play, then press **Enter** in supporting players or use the player's fullscreen control. **Edit games → Apply** changes your lineup during a session.
 
-**← / →** switch · **1–9** choose a slot · **B** previous video · **M** mute
+**← / →** switch · **1–9** choose a slot · **B** previous video · **M** mute · **Enter** fullscreen (supporting players)
 
 Player compatibility varies by site. Diagnostics stay on your computer, and you choose which sites receive access.
 
