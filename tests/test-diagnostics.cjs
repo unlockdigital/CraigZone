@@ -13,7 +13,7 @@ global.browser = {
   runtime: { sendNativeMessage: async (host, message) => { nativeMessages.push([host, message]); return { ok: true }; } }
 };
 
-const modulePath = path.resolve(__dirname, "extension/diagnostics.js");
+const modulePath = path.resolve(__dirname, "../src/diagnostics.js");
 delete require.cache[modulePath];
 require(modulePath);
 const diagnostics = global.CraigZoneDiagnostics;

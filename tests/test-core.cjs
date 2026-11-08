@@ -99,7 +99,7 @@ global.browser = {
   }
 };
 
-const corePath = path.resolve(__dirname, "extension/background.js");
+const corePath = path.resolve(__dirname, "../src/background.js");
 delete require.cache[corePath];
 const core = require(corePath);
 const messageHandler = runtimeMessage.listeners[0];

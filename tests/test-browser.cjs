@@ -8,7 +8,7 @@ const path = require("node:path");
 const { spawn } = require("node:child_process");
 
 const [browserBinary, builtExtension, extensionId] = process.argv.slice(2);
-assert(browserBinary && builtExtension && extensionId, "usage: node test-chromium.cjs BROWSER_BINARY BUILT_EXTENSION EXTENSION_ID");
+assert(browserBinary && builtExtension && extensionId, "usage: node tests/test-browser.cjs BROWSER_BINARY BUILT_EXTENSION EXTENSION_ID");
 const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), "craig-zone-chromium-") );
 const evidenceRoot = process.env.CZ_CHROMIUM_EVIDENCE_DIR || path.join(os.tmpdir(), `craig-zone-chromium-evidence-${process.pid}`);
 fs.mkdirSync(evidenceRoot, { recursive: true });

@@ -7,7 +7,7 @@ global.browser = {
   runtime:{getManifest:()=>({version:'0.3.0',permissions:['storage']}),getURL:()=> 'chrome-extension://synthetic/',sendNativeMessage:()=>{throw new Error('portable build must omit native messaging');}},
   storage:{local:{get:async(key)=>({[key]:values[key]}),set:async(data)=>Object.assign(values,data),remove:async(key)=>{delete values[key];}}}
 };
-require(path.resolve(__dirname,'extension/diagnostics.js'));
+require(path.resolve(__dirname,'../src/diagnostics.js'));
 (async()=>{
   const d=global.CraigZoneDiagnostics;
   d.record('edits');d.size(3);d.size(10);d.permission('denied');d.permission('https://private.example');

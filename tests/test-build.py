@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SPEC = importlib.util.spec_from_file_location("craig_zone_chromium_build", ROOT / "build.py")
+SPEC = importlib.util.spec_from_file_location("craig_zone_chromium_build", ROOT.parent / "scripts/build.py")
 BUILD = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(BUILD)
 

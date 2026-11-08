@@ -16,7 +16,7 @@ const chrome = {
   }
 };
 const context = vm.createContext({ chrome, console, WeakMap, Promise, setTimeout });
-const shimSource = fs.readFileSync(`${__dirname}/compat.js`, "utf8");
+const shimSource = fs.readFileSync(`${__dirname}/../src/chromium/compat.js`, "utf8");
 vm.runInContext(shimSource, context);
 
 async function dispatch(message) {

@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict");
 const path = require("node:path");
 
-const modulePath = path.resolve(__dirname, "extension/diagnostics.js");
+const modulePath = path.resolve(__dirname, "../src/diagnostics.js");
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 function deferred() {
   let resolve;

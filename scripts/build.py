@@ -12,7 +12,7 @@ import zlib
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SOURCE = HERE.parent / "extension"
+SOURCE = HERE.parent / "src"
 VERSION = "0.3.0"
 SOURCE_FILES = (
     "background.js", "content.css", "content.js", "diagnostics.js",
@@ -78,7 +78,7 @@ def build(destination: Path, extension_key: str | None = None, native_diagnostic
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, target)
-    compat = (HERE / "compat.js").read_text()
+    compat = (SOURCE / "chromium/compat.js").read_text()
     (destination / "compat.js").write_text(compat)
     (destination / "service-worker.js").write_text('importScripts("compat.js", "diagnostics.js", "background.js");\n')
     background = (destination / "background.js").read_text()

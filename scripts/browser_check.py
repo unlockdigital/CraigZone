@@ -11,7 +11,7 @@ import tempfile
 
 parser = argparse.ArgumentParser(); parser.add_argument('browser', type=Path); args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('build', root / 'chromium/build.py')
+spec = importlib.util.spec_from_file_location('build', root / 'scripts/build.py')
 builder = importlib.util.module_from_spec(spec); spec.loader.exec_module(builder)
 with tempfile.TemporaryDirectory(prefix='craig-zone-synthetic-identity-') as temporary:
     folder = Path(temporary)
@@ -22,4 +22,4 @@ with tempfile.TemporaryDirectory(prefix='craig-zone-synthetic-identity-') as tem
     builder.build(folder/'extension',base64.b64encode(public).decode())
     test_env={key:os.environ[key] for key in ('PATH','SYSTEMROOT','WINDIR','COMSPEC','TEMP','TMP','TMPDIR','DISPLAY','WAYLAND_DISPLAY','XDG_RUNTIME_DIR','CHROME_DEVEL_SANDBOX','CZ_CHROMIUM_EVIDENCE_DIR') if key in os.environ}
     test_env['HOME']=str(folder)
-    subprocess.run(['node',str(root/'chromium/test-chromium.cjs'),str(args.browser.resolve()),str(folder/'extension'),identity],cwd=root,check=True,timeout=180,env=test_env)
+    subprocess.run(['node',str(root/'tests/test-browser.cjs'),str(args.browser.resolve()),str(folder/'extension'),identity],cwd=root,check=True,timeout=180,env=test_env)

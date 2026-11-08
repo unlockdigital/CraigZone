@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.12'
-      - run: python3 tools/check.py
+      - run: python3 scripts/check.py
       - uses: browser-actions/setup-chrome@48ad923757ca74d66703209fe939badbdf80f2f4 # v2.2.0
         id: chrome
         with:
@@ -38,6 +38,6 @@ jobs:
           test "$(stat -c '%u' "$test_sandbox")" = 0
           test "$(stat -c '%a' "$test_sandbox")" = 4755
           printf 'CHROME_DEVEL_SANDBOX=%s\n' "$test_sandbox" >> "$GITHUB_ENV"
-      - run: python3 tools/browser_check.py "$CHROME_BINARY"
+      - run: python3 scripts/browser_check.py "$CHROME_BINARY"
         env:
           CHROME_BINARY: ${{ steps.chrome.outputs.chrome-path }}

@@ -2,8 +2,13 @@
   "name": "craig-zone",
   "version": "0.3.0",
   "private": true,
-  "description": "Keyboard switching and predictable audio for live video tabs",
+  "description": "RedZone-inspired switching and audio control for browser video tabs",
   "license": "MIT",
-  "engines": { "node": ">=22" },
-  "scripts": { "test": "python3 tools/check.py", "build": "python3 chromium/build.py build/chromium" }
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "python3 scripts/check.py",
+    "build": "python3 scripts/build.py build/chromium"
+  }
 }

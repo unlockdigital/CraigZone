@@ -5,8 +5,8 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
-const source = fs.readFileSync(path.join(__dirname, 'extension/content.js'), 'utf8');
-const css = fs.readFileSync(path.join(__dirname, 'extension/content.css'), 'utf8');
+const source = fs.readFileSync(path.join(__dirname, '../src/content.js'), 'utf8');
+const css = fs.readFileSync(path.join(__dirname, '../src/content.css'), 'utf8');
 
 class FakeStyle {
   constructor() { this.values = new Map(); this.writeCount = 0; }
