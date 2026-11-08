@@ -97,7 +97,7 @@ async function run() {
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
   const browserHome=path.join(temporaryRoot,"home");fs.mkdirSync(browserHome);
-  const browserEnv=Object.fromEntries(["PATH","SYSTEMROOT","WINDIR","COMSPEC","TEMP","TMP","TMPDIR","DISPLAY","WAYLAND_DISPLAY","XDG_RUNTIME_DIR"].filter(key=>process.env[key]).map(key=>[key,process.env[key]]));
+  const browserEnv=Object.fromEntries(["PATH","SYSTEMROOT","WINDIR","COMSPEC","TEMP","TMP","TMPDIR","DISPLAY","WAYLAND_DISPLAY","XDG_RUNTIME_DIR","CHROME_DEVEL_SANDBOX"].filter(key=>process.env[key]).map(key=>[key,process.env[key]]));
   Object.assign(browserEnv,{HOME:browserHome,XDG_CONFIG_HOME:path.join(browserHome,"config"),XDG_CACHE_HOME:path.join(browserHome,"cache")});
   browserProcess = spawn(browserBinary, [
     "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
@@ -396,10 +396,10 @@ run().catch((error) => {
   process.exitCode = 1;
 }).finally(async () => {
   try { if (browserSocket) browserSocket.close(); } catch {}
-  if (browserProcess && browserProcess.exitCode === null) {
+  if (browserProcess && browserProcess.exitCode === null && browserProcess.signalCode === null) {
     browserProcess.kill("SIGTERM");
     await Promise.race([new Promise((resolve) => browserProcess.once("exit", resolve)), new Promise((resolve) => setTimeout(resolve, 4000))]);
-    if (browserProcess.exitCode === null) {
+    if (browserProcess.exitCode === null && browserProcess.signalCode === null) {
       browserProcess.kill("SIGKILL");
       await new Promise((resolve) => browserProcess.once("exit", resolve));
     }

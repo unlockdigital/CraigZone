@@ -23,6 +23,21 @@ jobs:
         with:
           chrome-version: stable
           install-dependencies: true
+      - name: Configure the test browser sandbox
+        env:
+          CHROME_BINARY: ${{ steps.chrome.outputs.chrome-path }}
+        run: |
+          test_sandbox="$(dirname "$CHROME_BINARY")/chrome_sandbox"
+          if [ -f "$test_sandbox" ]; then
+            sudo chown root:root "$test_sandbox"
+            sudo chmod 4755 "$test_sandbox"
+          else
+            test_sandbox=/opt/google/chrome/chrome-sandbox
+          fi
+          test -x "$test_sandbox"
+          test "$(stat -c '%u' "$test_sandbox")" = 0
+          test "$(stat -c '%a' "$test_sandbox")" = 4755
+          printf 'CHROME_DEVEL_SANDBOX=%s\n' "$test_sandbox" >> "$GITHUB_ENV"
       - run: python3 tools/browser_check.py "$CHROME_BINARY"
         env:
           CHROME_BINARY: ${{ steps.chrome.outputs.chrome-path }}
